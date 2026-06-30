@@ -1,0 +1,19 @@
+{
+  "go.useLanguageServer": true,
+  "go.formatTool": "goimports",
+  "editor.formatOnSave": true,
+  "[go]": {
+    "editor.defaultFormatter": "golang.go",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+  "go.lintTool": "golangci-lint",
+  "go.lintOnSave": "workspace",
+  "gopls": {
+    "ui.diagnostic.analyses": {
+      "unusedparams": true,
+      "shadow": true
+    }
+  }
+}

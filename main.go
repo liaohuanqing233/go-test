@@ -7,6 +7,7 @@ import (
 	"goblog/bootstrap"
 	"goblog/config"
 	c "goblog/pkg/config"
+	"goblog/pkg/logger"
 )
 
 func init() {
@@ -14,6 +15,8 @@ func init() {
 }
 
 func main() {
+	defer logger.Sync()
+
 	// 数据库连接及数据库表初始化
 	bootstrap.SetupDB()
 

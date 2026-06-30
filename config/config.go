@@ -1,6 +1,12 @@
 package config
 
+import (
+	"goblog/pkg/config"
+	"goblog/pkg/logger"
+)
+
 // Initialize 配置信息初始化
 func Initialize() {
-	// 出发该文件夹下所有init方法
+	config.Load()
+	logger.Initialize()
 }

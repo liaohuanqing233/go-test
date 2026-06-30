@@ -1,0 +1,47 @@
+app:
+  name: GoBlog
+  env: local
+  debug: true
+  port: 3000
+  key: change-me-to-a-random-string
+
+database:
+  mysql:
+    host: 127.0.0.1
+    port: 3306
+    database: gotest
+    username: gotest
+    password: gotest
+    charset: utf8mb4
+    max_idle_connections: 100
+    max_open_connections: 25
+    max_life_seconds: 300
+
+log:
+  storage: storage/logs
+  async_buffer_size: 1024
+  channels:
+    app:
+      path: app
+      level: info
+      max_age: 30
+      async: false
+    error:
+      path: error
+      level: error
+      max_age: 30
+      async: false
+    sql:
+      path: sql
+      level: error
+      max_age: 7
+      async: false
+    curl:
+      path: curl
+      level: info
+      max_age: 7
+      async: true
+
+session:
+  default: cookie
+  session_name: goblog-session

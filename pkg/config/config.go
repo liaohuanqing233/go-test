@@ -1,7 +1,7 @@
 package config
 
 import (
-	"goblog/pkg/logger"
+	"log"
 
 	"github.com/spf13/cast"
 	"github.com/spf13/viper"
@@ -10,33 +10,50 @@ import (
 // Viper viper库实例
 var Viper *viper.Viper
 
-// StrMap 简写
-type StrMap map[string]interface{}
-
 func init() {
-	// 初始化viper库
 	Viper = viper.New()
-	// 设置文件名
-	Viper.SetConfigName(".env")
-	// 设置文件类型
-	Viper.SetConfigType("env")
-	// 设置配置文件查询路径
+	Viper.SetConfigName("config")
+	Viper.SetConfigType("yaml")
 	Viper.AddConfigPath(".")
-	// 读取配置文件
-	err := Viper.ReadInConfig()
-	logger.LogError(err)
-	// 设置环境变量前缀
-	Viper.SetEnvPrefix("appenv")
-	// Viper.Get() 优先读取环境变量
-	Viper.AutomaticEnv()
+	bindEnvs()
 }
 
-// Env 读取env配置
-func Env(envName string, defaultValue ...interface{}) interface{} {
-	if len(defaultValue) > 0 {
-		return Get(envName, defaultValue[0])
+// Load 读取配置文件，需在 defaults 注册之后调用
+func Load() {
+	err := Viper.ReadInConfig()
+	if err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
+			log.Println(err)
+		}
 	}
-	return Get(envName)
+}
+
+func bindEnvs() {
+	envs := map[string]string{
+		"app.name":                            "APP_NAME",
+		"app.env":                             "APP_ENV",
+		"app.debug":                           "APP_DEBUG",
+		"app.port":                            "APP_PORT",
+		"app.key":                             "APP_KEY",
+		"database.mysql.host":                 "DB_HOST",
+		"database.mysql.port":                 "DB_PORT",
+		"database.mysql.database":             "DB_DATABASE",
+		"database.mysql.username":             "DB_USERNAME",
+		"database.mysql.password":             "DB_PASSWORD",
+		"database.mysql.max_idle_connections": "DB_MAX_IDLE_CONNECTIONS",
+		"database.mysql.max_open_connections": "DB_MAX_OPEN_CONNECTIONS",
+		"database.mysql.max_life_seconds":     "DB_MAX_LIFE_SECONDS",
+		"session.default":                     "SESSION_DEFAULT",
+		"session.session_name":                "SESSION_NAME",
+	}
+	for key, env := range envs {
+		_ = Viper.BindEnv(key, env)
+	}
+}
+
+// SetDefault 设置默认值
+func SetDefault(key string, value interface{}) {
+	Viper.SetDefault(key, value)
 }
 
 // Get 获取配置，允许点式获取
@@ -48,11 +65,6 @@ func Get(path string, defaultValue ...interface{}) interface{} {
 		return nil
 	}
 	return Viper.Get(path)
-}
-
-// Add 新增配置
-func Add(name string, configuration map[string]interface{}) {
-	Viper.Set(name, configuration)
 }
 
 // GetString 获取string类型数据

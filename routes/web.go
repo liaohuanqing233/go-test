@@ -42,8 +42,6 @@ func RegisterWebRoutes(r *mux.Router) {
 	r.PathPrefix("/js/").Handler(http.FileServer(http.Dir("./public")))
 
 	// 中间件
-	// r.Use(middlewares.ForceHTML)
-
-	//开启会话
+	r.Use(middlewares.CurlLog)
 	r.Use(middlewares.StartSession)
 }

@@ -9,7 +9,6 @@ import (
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	gormlogger "gorm.io/gorm/logger"
 )
 
 // BaseModel 模型基类
@@ -47,18 +46,8 @@ func ConnectDB() *gorm.DB {
 		DSN: dsn,
 	})
 
-	var level gormlogger.LogLevel
-	if config.GetBool("app.debug") {
-		// 读取不到数据也会显示
-		level = gormlogger.Warn
-	} else {
-		// 只有错误才会显示
-		level = gormlogger.Error
-	}
-
-	// 获取数据库操作对象并使用日志记录
 	DB, err = gorm.Open(gormConfig, &gorm.Config{
-		Logger: gormlogger.Default.LogMode(level),
+		Logger: logger.NewGormLogger(),
 	})
 
 	logger.LogError(err)

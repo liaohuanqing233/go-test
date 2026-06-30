@@ -1,4 +1,4 @@
 tmp
-.env
+config.yaml
+storage/logs
 .idea
-.vscode

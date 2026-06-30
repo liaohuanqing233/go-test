@@ -3,8 +3,6 @@ package config
 import "goblog/pkg/config"
 
 func init() {
-	config.Add("session", config.StrMap{
-		"default":      config.Env("SESSION_DEFAULT", "cookie"),
-		"session_name": config.Env("SESSION_NAME", "goblog-session"),
-	})
+	config.SetDefault("session.default", "cookie")
+	config.SetDefault("session.session_name", "goblog-session")
 }
